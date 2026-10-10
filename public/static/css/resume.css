@@ -1,0 +1,249 @@
+@page {
+    size: A4;
+    margin: 0.75in;
+}
+
+:root {
+    color-scheme: light;
+    --resume-ink: #111111;
+    --resume-secondary: #444444;
+    --resume-accent: #0a3d62;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: var(--resume-ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.resume-document {
+    background: #ffffff;
+}
+
+.resume-paper {
+    box-sizing: border-box;
+    width: 8.27in;
+    min-height: 11.69in;
+    margin: 0 auto;
+    padding: 0.75in;
+    background: #ffffff;
+    color: #111111;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9.6pt;
+    line-height: 1.42;
+}
+
+.resume-header {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    min-height: 0.95in;
+    padding-bottom: 15px;
+    border-bottom: 0.5px solid #333333;
+    margin-bottom: 17px;
+}
+
+.resume-heading-copy {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.resume-header h1 {
+    margin: 0 0 8px;
+    color: #111111;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27pt;
+    font-weight: 400;
+    letter-spacing: -0.55px;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.resume-photo {
+    order: 2;
+    display: block;
+    width: 1in;
+    height: 1in;
+    flex: 0 0 1in;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.contact-line,
+.profile-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: 11px;
+    row-gap: 3px;
+    color: #444444;
+    font-size: 8.5pt;
+    overflow-wrap: anywhere;
+}
+
+.contact-line span + span::before {
+    content: "·";
+    padding-right: 11px;
+    color: #444444;
+}
+
+.profile-links {
+    margin-top: 5px;
+}
+
+.profile-links a,
+.entry-link a {
+    color: #0a3d62;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.profile-links a:hover,
+.entry-link a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.resume-section {
+    margin: 0 0 17px;
+    break-inside: auto;
+}
+
+.section-title {
+    margin: 0 0 10px;
+    padding-bottom: 4px;
+    border-bottom: 0.5px solid #333333;
+    color: #111111;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 9.5pt;
+    font-variant: small-caps;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.3;
+}
+
+.resume-entry {
+    margin: 0 0 10px;
+    break-inside: avoid;
+}
+
+.resume-entry:last-child {
+    margin-bottom: 0;
+}
+
+.entry-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.entry-heading h3 {
+    margin: 0;
+    color: #111111;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 10.1pt;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.entry-dates,
+.entry-link {
+    flex: 0 0 auto;
+    max-width: 42%;
+    margin: 0;
+    color: #444444;
+    font-size: 8.2pt;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.entry-subtitle {
+    margin: 2px 0 0;
+    color: #444444;
+    font-size: 9pt;
+    font-weight: 600;
+}
+
+.entry-location {
+    margin: 1px 0 0;
+    color: #444444;
+    font-size: 8.5pt;
+}
+
+.entry-description {
+    margin: 4px 0 0;
+    color: #111111;
+    white-space: pre-line;
+}
+
+.resume-bullets {
+    margin: 4px 0 0;
+    padding-left: 16px;
+    color: #111111;
+}
+
+.resume-bullets li {
+    margin: 0 0 2px;
+    padding-left: 1px;
+    break-inside: avoid;
+}
+
+.skills-list p {
+    margin: 0 0 4px;
+    color: #111111;
+    overflow-wrap: anywhere;
+}
+
+.skills-list p:last-child {
+    margin-bottom: 0;
+}
+
+.skills-list strong {
+    color: #111111;
+    font-weight: 700;
+}
+
+.certification-entry .entry-heading h3 {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+}
+
+@media screen {
+    .resume-paper {
+        box-shadow: none;
+        border: 1px solid #e3e3e3;
+    }
+}
+
+@media print {
+    html,
+    body {
+        width: auto;
+        background: #ffffff;
+    }
+
+    .resume-paper {
+        width: auto;
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: #ffffff;
+    }
+
+    a {
+        color: #0a3d62;
+        text-decoration: none;
+    }
+}
