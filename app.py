@@ -3,6 +3,7 @@
 import base64
 import hmac
 import io
+import os
 import logging
 import mimetypes
 import re
@@ -69,7 +70,8 @@ def create_app(test_config=None):
         app.config.update(test_config)
 
     Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
-    Path(app.instance_path).mkdir(parents=True, exist_ok=True)
+    if not os.environ.get("VERCEL"):
+         Path(app.instance_path).mkdir(parents=True, exist_ok=True)
     db.init_app(app)
 
     with app.app_context():
