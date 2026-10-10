@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Resume Studio — Student Resume Builder{% endblock %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">A thoughtful first impression</p>
+    <h1>A resume that feels like <em>you.</em></h1>
+    <p class="hero-copy">Build a clean, well-spaced resume for internships and your first role. Keep control of every line, preview it on an A4 page, and download a print-ready PDF.</p>
+    {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+    <div class="hero-actions">
+        <a class="button-link" href="{{ url_for('build') }}">Start Building</a>
+        <a class="text-link" href="{{ url_for('ai_import') }}">Import from notes or LinkedIn text</a>
+    </div>
+</section>
+<section class="intro-grid" aria-label="How it works">
+    <article>
+        <span class="step-number">01</span>
+        <h2>Add your details</h2>
+        <p>Enter your education, projects, practical experience, and skills. Upload a photo only if you want one.</p>
+    </article>
+    <article>
+        <span class="step-number">02</span>
+        <h2>Refine the content</h2>
+        <p>Keep descriptions factual and specific. Optional AI assistance can improve wording without changing your story.</p>
+    </article>
+    <article>
+        <span class="step-number">03</span>
+        <h2>Review and export</h2>
+        <p>Check the A4 preview, make final edits, then download a PDF designed for applications and printing.</p>
+    </article>
+</section>
+<section class="privacy-note">
+    <h2>Made for readable, human resumes</h2>
+    <p>No decorative icons, skill-rating bars, gradients, or template clutter. Your supporting documents are stored separately and never printed on the resume.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block title %}Build your resume — Resume Studio{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <p class="eyebrow">Resume editor</p>
+    <h1>Build your resume</h1>
+    <p>Use clear details and short, specific bullet points. You can add or remove rows as you go.</p>
+</div>
+{% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+<form class="builder-form" method="post" enctype="multipart/form-data" id="resume-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="resume_id" value="{{ resume_id }}">
+
+    <section class="form-section">
+        <div class="section-intro">
+            <p class="section-kicker">01</p>
+            <div><h2>Personal details</h2><p>Include only contact information you are comfortable sharing with employers.</p></div>
+        </div>
+        <div class="field-grid two-columns">
+            <label class="field">Full name <span class="required-mark">*</span>
+                <input name="name" required maxlength="120" autocomplete="name" value="{{ resume.personal.get('name', '') }}" placeholder="e.g. Aanya Sharma">
+            </label>
+            <label class="field">Phone
+                <input name="phone" maxlength="60" autocomplete="tel" value="{{ resume.personal.get('phone', '') }}" placeholder="+91 98765 43210">
+            </label>
+            <label class="field">Email
+                <input name="email" type="email" maxlength="160" autocomplete="email" value="{{ resume.personal.get('email', '') }}" placeholder="you@example.com">
+            </label>
+            <label class="field">Location
+                <input name="location" maxlength="120" autocomplete="address-level2" value="{{ resume.personal.get('location', '') }}" placeholder="City, State">
+            </label>
+            <label class="field">LinkedIn URL
+                <input name="linkedin" type="url" maxlength="500" value="{{ resume.personal.get('linkedin', '') }}" placeholder="https://linkedin.com/in/you">
+            </label>
+            <label class="field">GitHub URL
+                <input name="github" type="url" maxlength="500" value="{{ resume.personal.get('github', '') }}" placeholder="https://github.com/you">
+            </label>
+            <label class="field">Instagram URL <span class="optional-note">optional</span>
+                <input name="instagram" type="url" maxlength="500" value="{{ resume.personal.get('instagram', '') }}" placeholder="https://instagram.com/you">
+            </label>
+            <label class="field">Portfolio / website
+                <input name="portfolio" type="url" maxlength="500" value="{{ resume.personal.get('portfolio', '') }}" placeholder="https://yourportfolio.com">
+            </label>
+            <label class="field field-wide">Profile photo <span class="optional-note">JPG or PNG · up to 2 MB</span>
+                <input name="photo" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+            </label>
+        </div>
+    </section>
+
+    <section class="form-section">
+        <div class="section-intro">
+            <p class="section-kicker">02</p>
+            <div><h2>Education</h2><p>List your degree, institution, dates, and any relevant details.</p></div>
+        </div>
+        <div class="repeater" data-repeater="education">
+            {% for row in resume.education or [{'institution':'','degree':'','field':'','location':'','start_date':'','end_date':'','details':''}] %}
+            <article class="repeat-row" data-row>
+                <div class="repeat-row-heading"><h3>Education entry <span data-entry-number>{{ loop.index }}</span></h3><button type="button" class="remove-row" data-remove-row>Remove</button></div>
+                <div class="field-grid two-columns">
+                    <label class="field">Institution
+                        <input name="education-{{ loop.index0 }}-institution" maxlength="180" value="{{ row.get('institution', '') }}" placeholder="College or university">
+                    </label>
+                    <label class="field">Degree / qualification
+                        <input name="education-{{ loop.index0 }}-degree" maxlength="180" value="{{ row.get('degree', '') }}" placeholder="B.Tech, B.Sc, Diploma...">
+                    </label>
+                    <label class="field">Field of study
+                        <input name="education-{{ loop.index0 }}-field" maxlength="180" value="{{ row.get('field', '') }}" placeholder="Computer Science and Engineering">
+                    </label>
+                    <label class="field">Location
+                        <input name="education-{{ loop.index0 }}-location" maxlength="120" value="{{ row.get('location', '') }}" placeholder="City, State">
+                    </label>
+                    <label class="field">Start date
+                        <input name="education-{{ loop.index0 }}-start_date" maxlength="40" value="{{ row.get('start_date', '') }}" placeholder="Aug 2024">
+                    </label>
+                    <label class="field">End date / expected
+                        <input name="education-{{ loop.index0 }}-end_date" maxlength="40" value="{{ row.get('end_date', '') }}" placeholder="May 2028">
+                    </label>
+                    <label class="field field-wide">Additional detail <span class="optional-note">optional</span>
+                        <textarea name="education-{{ loop.index0 }}-details" rows="2" maxlength="1000" placeholder="Relevant coursework, honours, or academic distinction">{{ row.get('details', '') }}</textarea>
+                    </label>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <button type="button" class="secondary-button add-row" data-add-row="education">Add education</button>
+    </section>
+
+    <section class="form-section">
+        <div class="section-intro">
+            <p class="section-kicker">03</p>
+            <div><h2>Experience</h2><p>Internships, part-time work, volunteering, and relevant responsibilities all count.</p></div>
+        </div>
+        <div class="repeater" data-repeater="experience">
+            {% for row in resume.experience or [{'company':'','role':'','location':'','start_date':'','end_date':'','description':''}] %}
+            <article class="repeat-row" data-row>
+                <div class="repeat-row-heading"><h3>Experience entry <span data-entry-number>{{ loop.index }}</span></h3><button type="button" class="remove-row" data-remove-row>Remove</button></div>
+                <div class="field-grid two-columns">
+                    <label class="field">Role / position
+                        <input name="experience-{{ loop.index0 }}-role" maxlength="180" value="{{ row.get('role', '') }}" placeholder="Python Programming Intern">
+                    </label>
+                    <label class="field">Company / organization
+                        <input name="experience-{{ loop.index0 }}-company" maxlength="180" value="{{ row.get('company', '') }}" placeholder="Organization name">
+                    </label>
+                    <label class="field">Location <span class="optional-note">optional</span>
+                        <input name="experience-{{ loop.index0 }}-location" maxlength="120" value="{{ row.get('location', '') }}" placeholder="Remote or City, State">
+                    </label>
+                    <label class="field">Dates
+                        <div class="inline-fields">
+                            <input name="experience-{{ loop.index0 }}-start_date" maxlength="40" value="{{ row.get('start_date', '') }}" aria-label="Experience start date" placeholder="Jun 2025">
+                            <input name="experience-{{ loop.index0 }}-end_date" maxlength="40" value="{{ row.get('end_date', '') }}" aria-label="Experience end date" placeholder="Aug 2025">
+                        </div>
+                    </label>
+                    <label class="field field-wide">Description <span class="optional-note">one point per line</span>
+                        <textarea class="description-field" name="experience-{{ loop.index0 }}-description" rows="4" maxlength="3000" placeholder="Built a small application to...&#10;Collaborated with...">{{ row.get('description', '') }}</textarea>
+                        <span class="field-tools"><button type="button" class="text-button improve-description">Improve description</button><span class="ai-status" role="status" aria-live="polite"></span></span>
+                    </label>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <button type="button" class="secondary-button add-row" data-add-row="experience">Add experience</button>
+    </section>
+
+    <section class="form-section">
+        <div class="section-intro">
+            <p class="section-kicker">04</p>
+            <div><h2>Projects</h2><p>Focus on what you built, the tools you used, and the problem it solves.</p></div>
+        </div>
+        <div class="repeater" data-repeater="projects">
+            {% for row in resume.projects or [{'name':'','tech_stack':'','link':'','description':''}] %}
+            <article class="repeat-row" data-row>
+                <div class="repeat-row-heading"><h3>Project <span data-entry-number>{{ loop.index }}</span></h3><button type="button" class="remove-row" data-remove-row>Remove</button></div>
+                <div class="field-grid two-columns">
+                    <label class="field">Project name
+                        <input name="projects-{{ loop.index0 }}-name" maxlength="180" value="{{ row.get('name', '') }}" placeholder="Student Task Manager">
+                    </label>
+                    <label class="field">Tech stack
+                        <input name="projects-{{ loop.index0 }}-tech_stack" maxlength="300" value="{{ row.get('tech_stack', '') }}" placeholder="Python, Flask, SQLite">
+                    </label>
+                    <label class="field field-wide">Project link <span class="optional-note">optional</span>
+                        <input name="projects-{{ loop.index0 }}-link" type="url" maxlength="500" value="{{ row.get('link', '') }}" placeholder="https://github.com/you/project">
+                    </label>
+                    <label class="field field-wide">Description <span class="optional-note">one point per line</span>
+                        <textarea class="description-field" name="projects-{{ loop.index0 }}-description" rows="4" maxlength="3000" placeholder="Created a tool that...&#10;Implemented...">{{ row.get('description', '') }}</textarea>
+                        <span class="field-tools"><button type="button" class="text-button improve-description">Improve description</button><span class="ai-status" role="status" aria-live="polite"></span></span>
+                    </label>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <button type="button" class="secondary-button add-row" data-add-row="projects">Add project</button>
+    </section>
+
+    <section class="form-section">
+        <div class="section-intro">
+            <p class="section-kicker">05</p>
+            <div><h2>Skills</h2><p>Group your skills with labels. Separate groups with semicolons or new lines and items with commas.</p></div>
+        </div>
+        <label class="field">Skills by group
+            <textarea name="skills" rows="4" maxlength="3000" placeholder="Programming: Python, Java, C++&#10;Web: HTML, CSS, JavaScript&#10;Tools: Git, VS Code">{{ resume.skills_raw or '' }}</textarea>
+            <span class="field-help">Example: <strong>Programming:</strong> Python, Java; <strong>Tools:</strong> Git, VS Code</span>
+        </label>
+    </section>
+
+    <section class="form-section">
+        <div class="section-intro">
+            <p class="section-kicker">06</p>
+            <div><h2>Certifications</h2><p>Include relevant courses, certificates, and credentials.</p></div>
+        </div>
+        <div class="repeater" data-repeater="certifications">
+            {% for row in resume.certifications or [{'name':'','issuer':'','date':'','credential_url':''}] %}
+            <article class="repeat-row" data-row>
+                <div class="repeat-row-heading"><h3>Certification <span data-entry-number>{{ loop.index }}</span></h3><button type="button" class="remove-row" data-remove-row>Remove</button></div>
+                <div class="field-grid two-columns">
+                    <label class="field">Certificate name
+                        <input name="certifications-{{ loop.index0 }}-name" maxlength="200" value="{{ row.get('name', '') }}" placeholder="Python Programming Certificate">
+                    </label>
+                    <label class="field">Issuing organization
+                        <input name="certifications-{{ loop.index0 }}-issuer" maxlength="180" value="{{ row.get('issuer', '') }}" placeholder="Organization name">
+                    </label>
+                    <label class="field">Date
+                        <input name="certifications-{{ loop.index0 }}-date" maxlength="60" value="{{ row.get('date', '') }}" placeholder="Sep 2025">
+                    </label>
+                    <label class="field">Credential URL <span class="optional-note">optional</span>
+                        <input name="certifications-{{ loop.index0 }}-credential_url" type="url" maxlength="500" value="{{ row.get('credential_url', '') }}" placeholder="https://example.com/credential">
+                    </label>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <button type="button" class="secondary-button add-row" data-add-row="certifications">Add certification</button>
+    </section>
+
+    <section class="form-section">
+        <div class="section-intro">
+            <p class="section-kicker">07</p>
+            <div><h2>Supporting documents</h2><p>Upload certificates or marksheets for your own records. These files are stored separately and do not appear in the resume or PDF.</p></div>
+        </div>
+        <label class="field">Documents <span class="optional-note">PDF/JPG/PNG · 4 MB each · up to 5 per save</span>
+            <input name="documents" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+        </label>
+        {% if document_count %}<p class="field-help">{{ document_count }} supporting document(s) are already saved for this resume.</p>{% endif %}
+    </section>
+
+    <div class="form-submit-row">
+        <p class="field-help">Your entries are saved when you select “Preview resume”.</p>
+        <button class="button-link button-submit" type="submit">Preview resume</button>
+    </div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/builder.js') }}" defer></script>
+{% endblock %}

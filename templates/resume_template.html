@@ -1,0 +1,128 @@
+{% if standalone %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ resume.personal.get('name') or 'Resume' }}</title>
+    {% if css_text %}
+    <style>{{ css_text | safe }}</style>
+    {% else %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resume.css') }}">
+    {% endif %}
+</head>
+<body class="resume-document">
+{% endif %}
+<main class="resume-paper">
+    <header class="resume-header">
+        {% if photo_url %}
+        <img class="resume-photo" src="{{ photo_url }}" alt="Profile photo">
+        {% endif %}
+        <div class="resume-heading-copy">
+            <h1>{{ resume.personal.get('name') or 'Your Name' }}</h1>
+            <div class="contact-line">
+                {% if resume.personal.get('email') %}<span>{{ resume.personal.get('email') }}</span>{% endif %}
+                {% if resume.personal.get('phone') %}<span>{{ resume.personal.get('phone') }}</span>{% endif %}
+                {% if resume.personal.get('location') %}<span>{{ resume.personal.get('location') }}</span>{% endif %}
+            </div>
+            <div class="profile-links">
+                {% if resume.personal.get('linkedin') %}<a href="{{ resume.personal.get('linkedin') }}">LinkedIn</a>{% endif %}
+                {% if resume.personal.get('github') %}<a href="{{ resume.personal.get('github') }}">GitHub</a>{% endif %}
+                {% if resume.personal.get('portfolio') %}<a href="{{ resume.personal.get('portfolio') }}">Portfolio</a>{% endif %}
+                {% if resume.personal.get('instagram') %}<a href="{{ resume.personal.get('instagram') }}">Instagram</a>{% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% if resume.education %}
+    <section class="resume-section">
+        <h2 class="section-title">Education</h2>
+        {% for item in resume.education %}
+            {% if item.get('institution') or item.get('degree') or item.get('field') or item.get('details') %}
+            <article class="resume-entry">
+                <div class="entry-heading">
+                    <h3>{{ item.get('institution') or item.get('degree') }}</h3>
+                    <p class="entry-dates">{% if item.get('start_date') %}{{ item.get('start_date') }}{% endif %}{% if item.get('start_date') and item.get('end_date') %} – {% endif %}{% if item.get('end_date') %}{{ item.get('end_date') }}{% endif %}</p>
+                </div>
+                {% if item.get('degree') and item.get('institution') %}<p class="entry-subtitle">{{ item.get('degree') }}{% if item.get('field') %}, {{ item.get('field') }}{% endif %}</p>{% elif item.get('field') %}<p class="entry-subtitle">{{ item.get('field') }}</p>{% endif %}
+                {% if item.get('location') %}<p class="entry-location">{{ item.get('location') }}</p>{% endif %}
+                {% if item.get('details') %}<p class="entry-description">{{ item.get('details') }}</p>{% endif %}
+            </article>
+            {% endif %}
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if resume.experience %}
+    <section class="resume-section">
+        <h2 class="section-title">Experience</h2>
+        {% for item in resume.experience %}
+            {% if item.get('role') or item.get('company') or item.get('description') %}
+            <article class="resume-entry">
+                <div class="entry-heading">
+                    <h3>{{ item.get('role') or item.get('company') }}</h3>
+                    <p class="entry-dates">{% if item.get('start_date') %}{{ item.get('start_date') }}{% endif %}{% if item.get('start_date') and item.get('end_date') %} – {% endif %}{% if item.get('end_date') %}{{ item.get('end_date') }}{% endif %}</p>
+                </div>
+                {% if item.get('role') and item.get('company') %}<p class="entry-subtitle">{{ item.get('company') }}</p>{% endif %}
+                {% if item.get('location') %}<p class="entry-location">{{ item.get('location') }}</p>{% endif %}
+                {% set bullets = item.get('bullets') or item.get('description', '').splitlines() %}
+                {% if bullets %}<ul class="resume-bullets">{% for bullet in bullets if bullet %}<li>{{ bullet }}</li>{% endfor %}</ul>{% endif %}
+            </article>
+            {% endif %}
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if resume.projects %}
+    <section class="resume-section">
+        <h2 class="section-title">Projects</h2>
+        {% for item in resume.projects %}
+            {% if item.get('name') or item.get('description') or item.get('tech_stack') %}
+            <article class="resume-entry">
+                <div class="entry-heading">
+                    <h3>{{ item.get('name') or 'Project' }}</h3>
+                    {% if item.get('link') %}<p class="entry-link"><a href="{{ item.get('link') }}">Project link</a></p>{% endif %}
+                </div>
+                {% if item.get('tech_stack') %}<p class="entry-subtitle">{{ item.get('tech_stack') }}</p>{% endif %}
+                {% set bullets = item.get('bullets') or item.get('description', '').splitlines() %}
+                {% if bullets %}<ul class="resume-bullets">{% for bullet in bullets if bullet %}<li>{{ bullet }}</li>{% endfor %}</ul>{% endif %}
+            </article>
+            {% endif %}
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if resume.skill_groups %}
+    <section class="resume-section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-list">
+            {% for group in resume.skill_groups %}
+            {% if group.get('items') %}
+            <p><strong>{{ group.get('name') or 'Skills' }}:</strong> {{ group.get('items') | join(', ') }}</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if resume.certifications %}
+    <section class="resume-section">
+        <h2 class="section-title">Certifications</h2>
+        {% for item in resume.certifications %}
+            {% if item.get('name') or item.get('issuer') %}
+            <article class="resume-entry certification-entry">
+                <div class="entry-heading">
+                    <h3>{{ item.get('name') or item.get('issuer') }}</h3>
+                    {% if item.get('date') %}<p class="entry-dates">{{ item.get('date') }}</p>{% endif %}
+                </div>
+                {% if item.get('issuer') and item.get('name') %}<p class="entry-subtitle">{{ item.get('issuer') }}</p>{% endif %}
+                {% if item.get('credential_url') %}<p class="entry-link"><a href="{{ item.get('credential_url') }}">Credential</a></p>{% endif %}
+            </article>
+            {% endif %}
+        {% endfor %}
+    </section>
+    {% endif %}
+</main>
+{% if standalone %}
+</body>
+</html>
+{% endif %}

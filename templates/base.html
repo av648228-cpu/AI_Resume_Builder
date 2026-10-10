@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}Resume Studio{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="Resume Studio home">Resume Studio</a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="{{ url_for('build') }}">Builder</a>
+            <a href="{{ url_for('ai_import') }}">Import text</a>
+        </nav>
+    </header>
+
+    <main class="site-main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack" role="status" aria-live="polite">
+                    {% for category, message in messages %}
+                        <p class="flash-message flash-{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>Resume Studio · Clear, considered resumes for students.</p>
+    </footer>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

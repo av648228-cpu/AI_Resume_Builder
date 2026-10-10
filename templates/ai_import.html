@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Import resume text — Resume Studio{% endblock %}
+{% block content %}
+<div class="page-heading narrow-heading">
+    <p class="eyebrow">Bring your notes</p>
+    <h1>Import profile text</h1>
+    <p>Paste text from your LinkedIn profile or existing notes. We'll make a first pass at recognizing your contact details and resume sections, then open the editable builder.</p>
+</div>
+{% if message %}<p class="form-notice" role="status">{{ message }}</p>{% endif %}
+<form class="import-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="field">Pasted text
+        <textarea name="raw_text" rows="18" maxlength="20000" required placeholder="Your name&#10;email@example.com&#10;LinkedIn URL&#10;&#10;Education&#10;...&#10;&#10;Experience&#10;...&#10;&#10;Projects&#10;...&#10;&#10;Skills&#10;...">{{ raw_text }}</textarea>
+    </label>
+    <p class="field-help">Use text you have the right to share. Import results may be incomplete; review and correct all dates, links, and descriptions before exporting.</p>
+    <div class="form-submit-row"><span class="field-help">Local parsing works without an API key.</span><button type="submit" class="button-link">Parse and continue</button></div>
+</form>
+{% endblock %}

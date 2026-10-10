@@ -1,0 +1,20 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+instance/
+resume_builder.db
+uploads/*
+!uploads/.gitkeep
+.DS_Store
+# Generated PDF test files
+endpoint-test.pdf
+route-test.pdf
+weasyprint-test.pdf
+
+# Logs
+*.log
