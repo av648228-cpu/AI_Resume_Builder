@@ -254,6 +254,15 @@ def create_app(test_config=None):
             css_text=css_text,
             standalone=True,
         )
+        if os.environ.get("VERCEL"):
+           return render_template(
+           "resume_template.html",
+           resume=data,
+           photo_url=photo_url,
+           css_text=css_text,
+           standalone=True,
+           auto_print=True,
+        )
         try:
             pdf_bytes = create_pdf(html_content, base_url=app.root_path)
         except Exception as exc:

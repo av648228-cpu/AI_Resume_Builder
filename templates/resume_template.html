@@ -122,7 +122,17 @@
     </section>
     {% endif %}
 </main>
+
 {% if standalone %}
+    {% if auto_print | default(false) %}
+    <script>
+        window.addEventListener("load", function () {
+            window.setTimeout(function () {
+                window.print();
+            }, 300);
+        });
+    </script>
+    {% endif %}
 </body>
 </html>
 {% endif %}
